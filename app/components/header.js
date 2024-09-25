@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Logout from '@/app/components/logout';
 
 export default function Header() {
   return (
@@ -32,6 +33,7 @@ export default function Header() {
           placeholder="Buscar"
           className="px-4 py-2 rounded-full focus:outline-none text-black"
         />
+        <Logout/>
       </div>
     </header>
   );
