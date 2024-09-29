@@ -1,28 +1,28 @@
 "use client";
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import DropDownProfile from '../components/dropdown';
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
+import DropDownProfile from "../components/dropdown";
 
 const Navbar = () => {
   const [isClick, setIsClick] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  
+
   const toggleNavbar = () => {
     setIsClick(!isClick);
-  }
+  };
 
   const toggleProfileDropdown = () => {
     setOpenProfile(!openProfile);
-  }
+  };
 
   return (
     <>
       <nav className="bg-blue-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className='flex items-center justify-between h-16'>
-            <div className='flex items-center'>
-              <div className='flex-shrink-0'>
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
                 <Link href="/">
                   <Image
                     src="/images/logo1.png"
@@ -34,20 +34,29 @@ const Navbar = () => {
               </div>
             </div>
 
-            <div className='hidden lg:flex space-x-4 items-center'>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+            <div className="hidden lg:flex space-x-4 items-center">
+              <a
+                href="/"
+                className="text-white hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Inicio
               </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              <a
+                href="/"
+                className="text-white hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Sobre nosotros
               </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              <a
+                href="/"
+                className="text-white hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Contáctanos
               </a>
 
               <div className="relative">
-                <button 
-                  onClick={toggleProfileDropdown} 
+                <button
+                  onClick={toggleProfileDropdown}
                   className="text-white focus:outline-none"
                 >
                   <svg
@@ -66,39 +75,39 @@ const Navbar = () => {
               </div>
             </div>
 
-            <div className='lg:hidden flex items-center'>
-              <button 
-                className='inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
+            <div className="lg:hidden flex items-center">
+              <button
+                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 onClick={toggleNavbar}
               >
                 {isClick ? (
-                  <svg 
-                    className='h-6 w-6'
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                  <svg
+                    className="h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       strokeWidth={2}
-                      d='M6 18L18 6M6 6l12 12'
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 ) : (
-                  <svg 
-                    className='h-6 w-6'
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                  <svg
+                    className="h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       strokeWidth={2}
-                      d='M4 6h16M4 12h16m-7 6h7'
+                      d="M4 6h16M4 12h16m-7 6h7"
                     />
                   </svg>
                 )}
@@ -108,20 +117,29 @@ const Navbar = () => {
         </div>
 
         {isClick && (
-          <div className='lg:hidden'>
-            <div className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
-              <a href='/' className='text-white block hover:bg-white hover:text-black rounded-lg p-2'>
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <a
+                href="/"
+                className="text-white block hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Inicio
               </a>
-              <a href='/' className='text-white block hover:bg-white hover:text-black rounded-lg p-2'>
+              <a
+                href="/"
+                className="text-white block hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Sobre nosotros
               </a>
-              <a href='/' className='text-white block hover:bg-white hover:text-black rounded-lg p-2'>
+              <a
+                href="/"
+                className="text-white block hover:bg-white hover:text-black rounded-lg p-2"
+              >
                 Contáctanos
               </a>
               <div className="relative">
-                <button 
-                  onClick={toggleProfileDropdown} 
+                <button
+                  onClick={toggleProfileDropdown}
                   className="text-white focus:outline-none"
                 >
                   <svg
@@ -144,6 +162,6 @@ const Navbar = () => {
       </nav>
     </>
   );
-}
+};
 
 export default Navbar;
