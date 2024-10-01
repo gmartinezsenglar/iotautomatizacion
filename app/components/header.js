@@ -27,6 +27,9 @@ export default function Header() {
           <Link href="/login" className="header-link">
             INICIA SESION
           </Link>
+          <Link href="/admin" className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+            Panel de Admin
+          </Link>
         </nav>
         <input
           type="text"

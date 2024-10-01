@@ -48,6 +48,7 @@ export const login = async (prevState, formData) => {
 
 
   session.username = user.Usuario;
+  session.rol = user.rol;
   session.isPro =   isPro; 
   session.isLoggedIn = true;
 
@@ -69,8 +70,6 @@ export const changePremium = async () => {
   await session.save();
   revalidatePath("/profile");
 };
-
-
 
 
 
