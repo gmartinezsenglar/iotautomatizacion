@@ -1,6 +1,6 @@
 // src/app/page.js
-import React from "react";
 import UserTable from "@/components/Usertable";
+import "@/app/styles/globals.css";
 
 export default function UsersList() {
   return (

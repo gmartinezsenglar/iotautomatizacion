@@ -1,84 +1,313 @@
-// src/app/components/UserTable.js
-import React from "react";
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-const users = [
-  { id: 1, name: "John Doe", username: "john.doe", role: "Usuario" },
-  { id: 2, name: "Jane Smith", username: "jane.smith", role: "Administrador" },
-  { id: 3, name: "Mike Johnson", username: "mike.johnson", role: "Usuario" },
+// Definir las columnas para la tabla de usuarios
+const columns = [
+  { header: "", accessor: "avatar" },
+  { header: "Nombre", accessor: "name" },
+  { header: "Usuario", accessor: "userId" },
+  { header: "Rol", accessor: "role" },
+  { header: "Acciones", accessor: "action" },
 ];
 
-const UserTable = () => {
-  return (
-    <div className="p-6 bg-white shadow-md rounded-md">
-      {/* Encabezado y botón para agregar usuario */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold hidden md:block">Usuarios</h1>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
-          <img src="/images/create.png" alt="Agregar" className="w-5 h-5" />
+// Renderizar cada fila de la lista de usuarios
+const renderRow = (user, openEditModal) => (
+  <tr
+    key={user.id}
+    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-gray-100"
+  >
+    <td className="p-4">
+      <div className="flex items-center justify-center">
+        <Image
+          src={user.photo}
+          alt="User avatar"
+          width={40}
+          height={40}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      </div>
+    </td>
+    <td className="p-4">{user.name}</td>
+    <td className="p-4">{user.userId}</td>
+    <td className="p-4">{user.role}</td>
+    <td className="p-4">
+      <div className="flex items-center gap-2">
+        <Link href={`/list/users/${user.id}`}>
+          <button className="w-7 h-7 flex items-center justify-center rounded-full bg-blue-200">
+            <Image
+              src="/images/informacion.png"
+              alt="View"
+              width={16}
+              height={16}
+            />
+          </button>
+        </Link>
+        <button
+          className="w-7 h-7 flex items-center justify-center rounded-full bg-yellow-200"
+          onClick={() => openEditModal(user)}
+        >
+          <Image src="/images/editar.png" alt="Edit" width={16} height={16} />
+        </button>
+        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-red-200">
+          <Image src="/images/basura.png" alt="Delete" width={16} height={16} />
         </button>
       </div>
-      {/* Tabla */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border px-4 py-2 text-left hidden sm:table-cell">
-                Avatar
-              </th>
-              <th className="border px-4 py-2 text-left">Nombre</th>
-              <th className="border px-4 py-2 text-left">Usuario</th>
-              <th className="border px-4 py-2 text-left hidden sm:table-cell">
+    </td>
+  </tr>
+);
+
+// El componente del Modal para "Editar Usuario"
+const EditUserModal = ({ isOpen, onClose, user }) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Fondo Oscurecido */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        onClick={onClose}
+      ></div>
+
+      {/* Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg relative">
+          <h2 className="text-2xl font-semibold mb-4">Editar Usuario</h2>
+          <form>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Nombre
+              </label>
+              <input
+                type="text"
+                defaultValue={user.name} // Mostramos el nombre actual
+                className="mt-1 p-2 border rounded-md w-full"
+                placeholder="Ingresa nuevo nombre de usuario"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Usuario
+              </label>
+              <input
+                type="text"
+                defaultValue={user.userId} // Mostramos el ID actual
+                className="mt-1 p-2 border rounded-md w-full"
+                placeholder="Ingresa nuevo usuario."
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
                 Rol
-              </th>
-              <th className="border px-4 py-2 text-left">Acciones</th>
+              </label>
+              <select
+                className="mt-1 p-2 border rounded-md w-full"
+                defaultValue={user.role}
+              >
+                <option value="Administrador">Administrador</option>
+                <option value="Usuario">Usuario</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Nueva Contraseña
+              </label>
+              <input
+                type="password"
+                className="mt-1 p-2 border rounded-md w-full"
+                placeholder="Ingresa la nueva contraseña"
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+                onClick={onClose}
+              >
+                Actualizar datos
+              </button>
+              <button
+                type="button"
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// El componente del Modal para "Agregar Usuario"
+const AddUserModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Fondo Oscurecido */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        onClick={onClose}
+      ></div>
+
+      {/* Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg relative">
+          <h2 className="text-2xl font-semibold mb-4">Agregar Usuario</h2>
+          <form>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Nombre
+              </label>
+              <input
+                type="text"
+                className="mt-1 p-2 border rounded-md w-full"
+                placeholder="Ingresa el nombre del usuario"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Usuario
+              </label>
+              <input
+                type="text"
+                className="mt-1 p-2 border rounded-md w-full"
+                placeholder="Ingresa el usuario"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Rol
+              </label>
+              <select className="mt-1 p-2 border rounded-md w-full">
+                <option value="Admin">Admin</option>
+                <option value="User">Usuario</option>
+              </select>
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+                onClick={onClose}
+              >
+                Agregar
+              </button>
+              <button
+                type="button"
+                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md"
+                onClick={onClose}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// El componente principal para listar usuarios y manejar el modal
+const UserListPage = () => {
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const usersData = [
+    {
+      id: 1,
+      name: "Juan Perez",
+      userId: "juan_perez123pro",
+      photo: "/images/usuario.png",
+      role: "Admin",
+    },
+    {
+      id: 2,
+      name: "Maria Lopez",
+      userId: "maria_lopez45",
+      photo: "/images/usuario.png",
+      role: "Usuario",
+    },
+    {
+      id: 3,
+      name: "Martin Rodriguez",
+      userId: "martinsito123",
+      photo: "/images/usuario.png",
+      role: "Usuario",
+    },
+    {
+      id: 4,
+      name: "Alberto Expensive",
+      userId: "terminator911",
+      photo: "/images/usuario.png",
+      role: "Administrador",
+    },
+    {
+      id: 5,
+      name: "Pedro Sanchez",
+      userId: "ilovejava123",
+      photo: "/images/usuario.png",
+      role: "Administrador",
+    },
+    // Añade más usuarios según necesites
+  ];
+
+  const openEditModal = (user) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+  };
+
+  return (
+    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+      {/* Sección de encabezado */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-lg font-semibold pl-1">Usuarios registrados</h1>
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
+          onClick={() => setIsAddUserModalOpen(true)}
+        >
+          <img
+            src="/images/create.png"
+            alt="Agregar Usuario"
+            className="w-6 h-6"
+          />
+        </button>
+      </div>
+
+      {/* Tabla de usuarios */}
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full table-auto border-collapse">
+          <thead>
+            <tr className="text-left text-gray-500 text-sm bg-gray-100">
+              {columns.map((col) => (
+                <th key={col.accessor} className="p-4">
+                  {col.header}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b border-gray-200 even:bg-slate-50 text-sm"
-              >
-                <td className="border px-4 py-2 hidden sm:table-cell">
-                  <img
-                    src="/images/usuario.png"
-                    alt="avatar"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                </td>
-                <td className="border px-4 py-2">{user.name}</td>
-                <td className="border px-4 py-2">{user.username}</td>{" "}
-                {/* Username siempre visible */}
-                <td className="border px-4 py-2 hidden sm:table-cell">
-                  {user.role}
-                </td>
-                <td className="border px-4 py-2 flex space-x-2">
-                  <img
-                    src="/images/informacion.png"
-                    alt="Ver"
-                    className="w-6 h-6 cursor-pointer hover:opacity-75"
-                    title="Ver"
-                  />
-                  <img
-                    src="/images/editar.png"
-                    alt="Editar"
-                    className="w-6 h-6 cursor-pointer hover:opacity-75"
-                    title="Editar"
-                  />
-                  <img
-                    src="/images/basura.png"
-                    alt="Eliminar"
-                    className="w-6 h-6 cursor-pointer hover:opacity-75"
-                    title="Eliminar"
-                  />
-                </td>
-              </tr>
-            ))}
+            {usersData.map((user) => renderRow(user, openEditModal))}
           </tbody>
         </table>
       </div>
+
+      <AddUserModal
+        isOpen={isAddUserModalOpen}
+        onClose={() => setIsAddUserModalOpen(false)}
+      />
+      {/* Modal para editar usuario */}
+      <EditUserModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={selectedUser}
+      />
     </div>
   );
 };
 
-export default UserTable;
+export default UserListPage;
