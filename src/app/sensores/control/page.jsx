@@ -11,11 +11,14 @@ export default async function control() {
   }
 
   return (
-    <main className="container mx-auto mt-8"> {/* Contenedor principal */}
-      
+    <main className="container mx-auto mt-8">
+      {" "}
+      {/* Contenedor principal */}
       {/* Barra de navegación estilizada */}
-      <nav className="shadow-md rounded-lg mb-8"> 
-        <ul className="flex justify-around"> {/* Lista horizontal de enlaces */}
+      <nav className="shadow-md rounded-lg mb-8">
+        <ul className="flex justify-around">
+          {" "}
+          {/* Lista horizontal de enlaces */}
           <li>
             <a
               href="./monitoreo"
@@ -25,7 +28,8 @@ export default async function control() {
               }}
             >
               <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-green-700 opacity-25" />
-              <span className="relative">MONITOREO</span> {/* Texto del botón */}
+              <span className="relative">MONITOREO</span>{" "}
+              {/* Texto del botón */}
             </a>
           </li>
           {/* Más botones de navegación con estilos similares */}
@@ -79,47 +83,74 @@ export default async function control() {
           </li>
         </ul>
       </nav>
-
       {/* Sección de control */}
       <section className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1> {/* Título de la sección */}
-
-        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden"> {/* Contenedor del panel de control */}
+        <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1>{" "}
+        {/* Título de la sección */}
+        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
+          {" "}
+          {/* Contenedor del panel de control */}
           {/* Panel de control con sliders y botones */}
           <div className="flex flex-col items-center space-y-6">
-
             {/* Ajuste general */}
             <div className="flex items-center space-x-2">
               <span className="text-lg font-medium">AJUSTAR</span>
               <div className="w-16 h-8 bg-gray-300 rounded-full relative shadow-inner">
-                <span className="absolute w-8 h-8 bg-gray-700 rounded-full left-0 top-0 transition-all duration-300" /> {/* Botón de interruptor */}
+                <span className="absolute w-8 h-8 bg-gray-700 rounded-full left-0 top-0 transition-all duration-300" />{" "}
+                {/* Botón de interruptor */}
               </div>
             </div>
 
             {/* Control de luz/calor */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">LUZ/CALOR</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">-</button>
-              <input type="range" min="0" max="100" className="w-64 h-6 bg-gray-200 rounded-full" />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">+</button>
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+                -
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                className="w-64 h-6 bg-gray-200 rounded-full"
+              />
+              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                +
+              </button>
             </div>
 
             {/* Control del ventilador 1 */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">VENTILADOR 1</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">-</button>
-              <input type="range" min="0" max="100" className="w-64 h-6 bg-gray-200 rounded-full" />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">+</button>
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+                -
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                className="w-64 h-6 bg-gray-200 rounded-full"
+              />
+              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                +
+              </button>
             </div>
 
             {/* Control del ventilador 2 */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">VENTILADOR 2</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">-</button>
-              <input type="range" min="0" max="100" className="w-64 h-6 bg-gray-200 rounded-full" />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">+</button>
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+                -
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                className="w-64 h-6 bg-gray-200 rounded-full"
+              />
+              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                +
+              </button>
             </div>
-
           </div>
         </div>
       </section>
