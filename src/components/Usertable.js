@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,8 +7,8 @@ import Link from "next/link";
 const columns = [
   { header: "", accessor: "avatar" },
   { header: "Nombre", accessor: "name" },
-  { header: "Usuario", accessor: "userId" },
-  { header: "Rol", accessor: "role" },
+  { header: "Usuario", accessor: "Usuario" },
+  { header: "Rol", accessor: "rol" },
   { header: "Acciones", accessor: "action" },
 ];
 
@@ -21,7 +21,7 @@ const renderRow = (user, openEditModal) => (
     <td className="p-4">
       <div className="flex items-center justify-center">
         <Image
-          src={user.photo}
+          src="/images/usuario.png" // Imagen predeterminada si no hay foto
           alt="User avatar"
           width={40}
           height={40}
@@ -30,8 +30,8 @@ const renderRow = (user, openEditModal) => (
       </div>
     </td>
     <td className="p-4">{user.name}</td>
-    <td className="p-4">{user.userId}</td>
-    <td className="p-4">{user.role}</td>
+    <td className="p-4">{user.Usuario}</td>
+    <td className="p-4">{user.rol}</td>
     <td className="p-4">
       <div className="flex items-center gap-2">
         <Link href={`/list/users/${user.id}`}>
@@ -92,7 +92,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
               </label>
               <input
                 type="text"
-                defaultValue={user.userId} // Mostramos el ID actual
+                defaultValue={user.Usuario} // Mostramos el ID actual
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa nuevo usuario."
               />
@@ -211,50 +211,26 @@ const AddUserModal = ({ isOpen, onClose }) => {
   );
 };
 
-// El componente principal para listar usuarios y manejar el modal
 const UserListPage = () => {
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [usersData, setUsersData] = useState([]); // Estado para los datos de usuarios
 
-  const usersData = [
-    {
-      id: 1,
-      name: "Juan Perez",
-      userId: "juan_perez123pro",
-      photo: "/images/usuario.png",
-      role: "Admin",
-    },
-    {
-      id: 2,
-      name: "Maria Lopez",
-      userId: "maria_lopez45",
-      photo: "/images/usuario.png",
-      role: "Usuario",
-    },
-    {
-      id: 3,
-      name: "Martin Rodriguez",
-      userId: "martinsito123",
-      photo: "/images/usuario.png",
-      role: "Usuario",
-    },
-    {
-      id: 4,
-      name: "Alberto Expensive",
-      userId: "terminator911",
-      photo: "/images/usuario.png",
-      role: "Administrador",
-    },
-    {
-      id: 5,
-      name: "Pedro Sanchez",
-      userId: "ilovejava123",
-      photo: "/images/usuario.png",
-      role: "Administrador",
-    },
-    // Añade más usuarios según necesites
-  ];
+  // Función para obtener los usuarios desde la API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/users");
+        const data = await response.json();
+        setUsersData(data); // Actualizamos el estado con los datos de la API
+      } catch (error) {
+        console.error("Error al obtener los usuarios:", error);
+      }
+    };
+
+    fetchUsers(); // Llamar a la función para cargar los usuarios cuando el componente se monte
+  }, []);
 
   const openEditModal = (user) => {
     setSelectedUser(user);
