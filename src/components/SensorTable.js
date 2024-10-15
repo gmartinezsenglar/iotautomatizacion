@@ -1,36 +1,26 @@
-// components/SensorTable.js
 "use client";
-import { useState } from "react";
+import useSWR from 'swr';
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const SensorTable = () => {
-  // Mock data
-  const [sensorData, setSensorData] = useState({
-    temperatura: 30,
-    eco2: 700,
-    humedadAire: 30,
-    humedadTierra: 40,
-    luminosidad: 600,
+  const { data: sensorData, error, mutate, isValidating } = useSWR('../api/monitoreo', fetcher, {
+    refreshInterval: 5000,
   });
 
-  // Función para actualizar los datos (mock)
-  const actualizarDatos = () => {
-    setSensorData({
-      temperatura: Math.floor(Math.random() * 35) + 20, // 20°C - 35°C
-      eco2: Math.floor(Math.random() * 800) + 400, // 400 - 1200 PPM
-      humedadAire: Math.floor(Math.random() * 40) + 20, // 20% - 60%
-      humedadTierra: Math.floor(Math.random() * 60) + 20, // 20% - 80%
-      luminosidad: Math.floor(Math.random() * 1000), // 0 - 1000 Lux
-    });
+  const handleActualizar = () => {
+    mutate();
   };
+
+  if (error) return <div>Error al cargar los datos.</div>;
+  if (!sensorData) return <div>Cargando...</div>;
 
   return (
     <main className="container mx-auto mt-8">
-      {" "}
       {/* Contenedor principal */}
       {/* Barra de navegación estilizada */}
       <nav className="shadow-md rounded-lg mb-8">
         <ul className="flex justify-around">
-          {" "}
           {/* Lista horizontal de enlaces */}
           <li>
             <a
@@ -41,8 +31,7 @@ const SensorTable = () => {
               }}
             >
               <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-green-700 opacity-25" />
-              <span className="relative">MONITOREO</span>{" "}
-              {/* Texto del botón */}
+              <span className="relative">MONITOREO</span>
             </a>
           </li>
           {/* Más botones de navegación con estilos similares */}
@@ -98,21 +87,15 @@ const SensorTable = () => {
       </nav>
       {/* Sección de Datos Actuales */}
       <section className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-4">DATOS ACTUALES</h1>{" "}
-        {/* Título de la sección */}
+        <h1 className="text-2xl font-bold mb-4">DATOS ACTUALES</h1>
+        {/* Contenedor de la tabla */}
         <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
-          {" "}
-          {/* Contenedor de la tabla */}
+          {/* Tabla de datos */}
           <table className="w-full table-auto text-left border-separate border-spacing-0">
-            {" "}
-            {/* Tabla de datos */}
             <thead>
               <tr className="bg-cyan-600 text-white">
-                {" "}
                 {/* Cabecera de la tabla en celeste */}
-                <th className="px-4 py-2 border-b border-gray-300">
-                  Parámetro
-                </th>
+                <th className="px-4 py-2 border-b border-gray-300">Parámetro</th>
                 <th className="px-4 py-2 border-b border-gray-300">Valor</th>
               </tr>
             </thead>
@@ -121,12 +104,10 @@ const SensorTable = () => {
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
                   TEMPERATURA
-                </td>{" "}
-                {/* Color celeste para el parámetro */}
+                </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
                   {sensorData.temperatura}°C
-                </td>{" "}
-                {/* Color celeste para el valor */}
+                </td>
               </tr>
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
@@ -162,17 +143,17 @@ const SensorTable = () => {
               </tr>
             </tbody>
           </table>
-          <hr className="my-4 border-t border-cyan-300" />{" "}
-          {/* Línea horizontal entre parámetros */}
+          <hr className="my-4 border-t border-cyan-300" /> {/* Línea horizontal entre parámetros */}
         </div>
       </section>
       {/* Botón de actualizar datos */}
       <div className="text-center mt-8">
         <button
-          onClick={actualizarDatos}
+          onClick={handleActualizar}
           className="px-6 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-300"
+          disabled={isValidating} /* Deshabilitar botón mientras se actualiza */
         >
-          ACTUALIZAR DATOS {/* Texto del botón */}
+          {isValidating ? 'Actualizando...' : 'ACTUALIZAR DATOS'}
         </button>
       </div>
     </main>
