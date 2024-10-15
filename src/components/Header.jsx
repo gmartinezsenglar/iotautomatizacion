@@ -38,10 +38,10 @@ const Navbar = () => {
               <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Inicio
               </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              <a href='/informacion' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Sobre nosotros
               </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              <a href='/contactanos' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Contáctanos
               </a>
               <Link href="/admin" className='text-white hover:bg-white hover:text-black rounded-lg p-2'>

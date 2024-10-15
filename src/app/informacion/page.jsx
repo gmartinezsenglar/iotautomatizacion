@@ -1,4 +1,4 @@
-import { changePremium, changeUsername, getSession } from "@/actions";
+import { getSession } from "@/actions";
 import { redirect } from "next/navigation";
 
 export default async function Informacion() {
@@ -12,7 +12,7 @@ export default async function Informacion() {
       <div className='container mx-auto p-4'>
           {/* Page Content */}
           <h1>
-              Información - \app\informacion\page.jsx 
+              Información 
           </h1>
       </div>
   );
