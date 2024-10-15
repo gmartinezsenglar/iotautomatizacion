@@ -8,6 +8,8 @@ export default async function Login() {
     
     if (session.isLoggedIn) {
       redirect("/");
+
+      
     }
     return (
       <div className="min-h-screen grid grid-cols-2">
@@ -22,10 +24,9 @@ export default async function Login() {
         </div>
         <div className="flex items-center justify-center bg-white p-8">
           <div className="w-full max-w-sm">
-            <h2 className="text-2xl font-bold mb-6 text-center">INGRESA</h2>
           <LoginForm></LoginForm>
           </div>
         </div>
       </div>
     );
-}
+} 
