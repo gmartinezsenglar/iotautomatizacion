@@ -1,30 +1,32 @@
-import { getSession } from "@/actions"; // Importa la función para obtener la sesión del usuario
-import { redirect } from "next/navigation"; // Importa la función para redirigir a otra página
-import ControlTable from "@/components/ControlTable";
-import { getSession } from "@/actions";
-import { redirect } from "next/navigation";
+"use client";
 
-// Componente principal de la página de control
-export default async function control() {
-  const session = await getSession(); // Obtiene la sesión actual del usuario
-export default async function Control() {
-  const session = await getSession();
+import { useState } from "react";
+import useSWR from 'swr';
 
-  // Verifica si el usuario está autenticado
-  if (!session.isLoggedIn) {
-    redirect("/login"); // Redirige a la página de inicio de sesión si no está autenticado
-    redirect("/login");
-  }
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+// Valor inicial
+const ControlTable = () => {
+  const [lightHeat, setLightHeat] = useState(50); 
+  const [fan1, setFan1] = useState(50);
+  const [fan2, setFan2] = useState(50);
+  
+  // Aumentar el valor
+  const increase = (setter, value) => {
+    if (value < 100) setter(value + 10);
+  };
+
+  // Disminuir el valor
+  const decrease = (setter, value) => {
+    if (value > 0) setter(value - 10);
+  };
 
   return (
     <main className="container mx-auto mt-8">
-      {" "}
       {/* Contenedor principal */}
       {/* Barra de navegación estilizada */}
       <nav className="shadow-md rounded-lg mb-8">
         <ul className="flex justify-around">
-          {" "}
-          {/* Lista horizontal de enlaces */}
           <li>
             <a
               href="./monitoreo"
@@ -34,11 +36,9 @@ export default async function Control() {
               }}
             >
               <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-green-700 opacity-25" />
-              <span className="relative">MONITOREO</span>{" "}
-              {/* Texto del botón */}
+              <span className="relative">MONITOREO</span>
             </a>
           </li>
-          {/* Más botones de navegación con estilos similares */}
           <li>
             <a
               href="./monitoreo"
@@ -89,37 +89,37 @@ export default async function Control() {
           </li>
         </ul>
       </nav>
-      {/* Sección de control */}
-      <section className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1>{" "}
-        {/* Título de la sección */}
-        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
-          {" "}
-          {/* Contenedor del panel de control */}
-          {/* Panel de control con sliders y botones */}
-          <div className="flex flex-col items-center space-y-6">
-            {/* Ajuste general */}
-            <div className="flex items-center space-x-2">
-              <span className="text-lg font-medium">AJUSTAR</span>
-              <div className="w-16 h-8 bg-gray-300 rounded-full relative shadow-inner">
-                <span className="absolute w-8 h-8 bg-gray-700 rounded-full left-0 top-0 transition-all duration-300" />{" "}
-                {/* Botón de interruptor */}
-              </div>
-            </div>
 
+      {/* Sección de control */}
+
+      <section className="text-center mb-8">
+        <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1>
+
+        {/* Panel de control */}
+        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="flex flex-col items-center space-y-6">
+            
             {/* Control de luz/calor */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">LUZ/CALOR</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => decrease(setLightHeat, lightHeat)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 -
               </button>
               <input
                 type="range"
                 min="0"
                 max="100"
+                value={lightHeat}
+                onChange={(e) => setLightHeat(parseInt(e.target.value))}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => increase(setLightHeat, lightHeat)}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 +
               </button>
             </div>
@@ -127,36 +127,49 @@ export default async function Control() {
             {/* Control del ventilador 1 */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">VENTILADOR 1</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => decrease(setFan1, fan1)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 -
               </button>
               <input
                 type="range"
                 min="0"
                 max="100"
+                value={fan1}
+                onChange={(e) => setFan1(parseInt(e.target.value))}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => increase(setFan1, fan1)}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 +
               </button>
             </div>
-  if (!session) {
-    return <div>Cargando...</div>;
-  }
 
             {/* Control del ventilador 2 */}
             <div className="flex items-center space-x-4">
               <span className="text-lg">VENTILADOR 2</span>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => decrease(setFan2, fan2)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 -
               </button>
               <input
                 type="range"
                 min="0"
                 max="100"
+                value={fan2}
+                onChange={(e) => setFan2(parseInt(e.target.value))}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+              <button
+                onClick={() => increase(setFan2, fan2)}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
+              >
                 +
               </button>
             </div>
@@ -164,10 +177,7 @@ export default async function Control() {
         </div>
       </section>
     </main>
-  return (
-    <div>
-      <ControlTable/>
-    </div>
   );
-}
-}
+};
+
+export default ControlTable;
