@@ -1,4 +1,3 @@
-// pages/index.js
 import SensorTable from "@/components/SensorTable";
 import { getSession } from "@/actions";
 import { redirect } from "next/navigation";
@@ -14,7 +13,6 @@ export default async function Monitoreo() {
     return <div>Cargando...</div>;
   }
 
-export default function monitoreo() {
   return (
     <div>
       <SensorTable />
