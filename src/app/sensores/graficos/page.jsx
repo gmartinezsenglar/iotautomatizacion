@@ -1,10 +1,10 @@
-// src/app/sensores/graficos/page.jsx
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LineChart from "@/components/GraficoLineas";
 import Estadisticas from "@/components/Estadisticas"; // Componente de estadísticas
 import DatePicker from "react-datepicker"; // Importar DatePicker
 import "react-datepicker/dist/react-datepicker.css"; // Importar estilos de DatePicker
+import { obtenerDatosSimulados, calcular_estadisticas } from "@/recibir_datos";
 
 const sensorLabels = {
   temperatura: "Temperatura",
@@ -85,6 +85,23 @@ const sensorData = {
 const GraficosPage = () => {
   const [selectedSensor, setSelectedSensor] = useState("temperatura");
   const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para la fecha seleccionada
+  const [datosSimulados, setDatosSimulados] = useState([]);
+  const [estadisticas, setEstadisticas] = useState({}); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const datos = await obtenerDatosSimulados();
+      setDatosSimulados(datos);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const filteredData = datosSimulados.filter(dato => dato.tipo === selectedSensor);
+    const stats = calcular_estadisticas(filteredData);
+    setEstadisticas(stats[selectedSensor] || {}); 
+  }, [datosSimulados, selectedSensor]); 
+
   const sensorLabel = sensorLabels[selectedSensor];
 
   const chartOptions = {
@@ -196,8 +213,8 @@ const GraficosPage = () => {
               </select>
             </div>
 
-            {/* Selector de fecha */}
-            <div className="flex flex-col w-1/2 ml-4">
+           {/* Selector de fecha */}
+           <div className="flex flex-col w-1/2 ml-4">
               <label className="block text-lg font-bold mb-2" htmlFor="fecha">
                 Selecciona la Fecha:
               </label>
@@ -219,7 +236,7 @@ const GraficosPage = () => {
 
         {/* Panel de estadísticas */}
         <div className="mb-4 bg-white shadow-lg rounded-lg p-4">
-          <Estadisticas sensor={sensorLabel} />
+          <Estadisticas datos={estadisticas} />
         </div>
       </div>
     </main>

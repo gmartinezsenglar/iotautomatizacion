@@ -85,7 +85,7 @@ const ControlTable = () => {
           </li>
           <li className="w-full md:w-auto">
             <a
-              href="#"
+              href="./graficos"
               className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
               <span className="relative">GRÁFICOS</span>

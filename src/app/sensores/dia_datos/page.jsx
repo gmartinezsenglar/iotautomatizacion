@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker"; 
 import "react-datepicker/dist/react-datepicker.css";
 import Estadisticas from "@/components/Estadisticas"; 
-import { obtenerDatosSimulados } from "@/recibir_datos";
-import { calcular_estadisticas } from "@/recibir_datos"; 
+import { obtenerDatosSimulados,  calcular_estadisticas } from "@/recibir_datos";
 
 const sensorLabels = {
   temperatura: "Temperatura",
@@ -70,7 +69,7 @@ const DatosDia = () => {
         </li>
         <li className="w-full md:w-auto">
           <a
-            href="#"
+            href="./graficos"
             className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
           >
             <span className="relative">GRÁFICOS</span>
