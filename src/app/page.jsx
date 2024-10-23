@@ -16,7 +16,7 @@ export default async function HomePage() {
         SISTEMAS REGISTRADOS
       </h1>
       <div className="grid grid-cols-2 gap-8">
-        <Card title="INVERNADERO" image="/images/greenhouse.png" />
+        <Card href="/sensores/monitoreo" title="INVERNADERO" image="/images/greenhouse.png" />
         <Card title="INCUBADORA" image="/images/incubator.png" />
         <Card title="HOGAR" image="/images/house.png" />
         <Card title="CÁMARAS DE SEGURIDAD" image="/images/camera.png" />
