@@ -41,7 +41,7 @@ describe('SensorTable', () => {
         eco2: 400,
         humedadAire: 60,
         humedadTierra: 30,
-        luminosidad: 1000,
+        luz: 50,
       },
       error: null,
       mutate: jest.fn(),
@@ -60,7 +60,7 @@ describe('SensorTable', () => {
     expect(screen.getByText('HUMEDAD TIERRA')).toBeInTheDocument();
     expect(screen.getByText('30%')).toBeInTheDocument();
     expect(screen.getByText('LUMINOSIDAD')).toBeInTheDocument();
-    expect(screen.getByText('1000 Lux')).toBeInTheDocument();
+    expect(screen.getByText('50 Lux')).toBeInTheDocument();
   });
 
   it('botón de actualizar', async () => {
@@ -71,7 +71,7 @@ describe('SensorTable', () => {
         eco2: 400,
         humedadAire: 60,
         humedadTierra: 30,
-        luminosidad: 1000,
+        luz: 50,
       },
       error: null,
       mutate,
