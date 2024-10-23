@@ -4,7 +4,7 @@ import useSWR from 'swr';
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const SensorTable = () => {
-  const { data: sensorData, error, mutate, isValidating } = useSWR('../api/monitoreo', fetcher, {
+  const { data: data, error, mutate, isValidating } = useSWR('/api/monitoreo', fetcher, {
     refreshInterval: 5000,
   });
 
@@ -13,7 +13,7 @@ const SensorTable = () => {
   };
 
   if (error) return <div>Error al cargar los datos.</div>;
-  if (!sensorData) return <div>Cargando...</div>;
+  if (!data) return <div>Cargando...</div>;
 
   return (
     <main className="container mx-auto mt-8">
@@ -106,7 +106,7 @@ const SensorTable = () => {
                   TEMPERATURA
                 </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
-                  {sensorData.temperatura}°C
+                  {data.temperatura}°C
                 </td>
               </tr>
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
@@ -114,7 +114,7 @@ const SensorTable = () => {
                   ECO 2
                 </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
-                  {sensorData.eco2} PPM
+                  {data.eco2} PPM
                 </td>
               </tr>
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
@@ -122,7 +122,7 @@ const SensorTable = () => {
                   HUMEDAD AIRE
                 </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
-                  {sensorData.humedadAire}%
+                  {data.humedadAire}%
                 </td>
               </tr>
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
@@ -130,7 +130,7 @@ const SensorTable = () => {
                   HUMEDAD TIERRA
                 </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
-                  {sensorData.humedadTierra}%
+                  {data.humedadTierra}%
                 </td>
               </tr>
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
@@ -138,7 +138,7 @@ const SensorTable = () => {
                   LUMINOSIDAD
                 </td>
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
-                  {sensorData.luminosidad} Lux
+                  {data.luz} Lux
                 </td>
               </tr>
             </tbody>

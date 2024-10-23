@@ -1,22 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import useSWR from 'swr';
+import { mutate } from "swr";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
-// Valor inicial
 const ControlTable = () => {
-  const [lightHeat, setLightHeat] = useState(50); 
+  const [luz, setLight] = useState(50); 
   const [fan1, setFan1] = useState(50);
   const [fan2, setFan2] = useState(50);
   
-  // Aumentar el valor
+  const sendDataToAPI = async (device, value) => {
+    try {
+      const response = await fetch('/api/monitoreo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ device, value }),
+      });
+
+      if (response.ok) {
+        mutate('/api/monitoreo');
+      } else {
+        throw new Error('Error al enviar datos a la API');
+      }
+    } catch (error) {
+      console.error('Error enviando datos a la API:', error);
+    }
+  };
+  
+  //Manejar cambios
+  const handleLightChange = (e) => {
+    const newValue = parseInt(e.target.value);
+    setLight(newValue);
+    sendDataToAPI('luz', newValue);
+  };
+
+  const handleFan1Change = (e) => {
+    const newValue = parseInt(e.target.value);
+    setFan1(newValue);
+    sendDataToAPI('fan1', newValue);
+  };
+
+  const handleFan2Change = (e) => {
+    const newValue = parseInt(e.target.value);
+    setFan2(newValue);
+    sendDataToAPI('fan2', newValue);
+  };
+
+  // Cambiar el valor
   const increase = (setter, value) => {
     if (value < 100) setter(value + 10);
   };
-
-  // Disminuir el valor
   const decrease = (setter, value) => {
     if (value > 0) setter(value - 10);
   };
@@ -101,23 +133,24 @@ const ControlTable = () => {
             
             {/* Control de luz/calor */}
             <div className="flex items-center space-x-4">
-              <span className="text-lg">LUZ/CALOR</span>
+              <span className="text-lg">LUZ</span>
               <button
-                onClick={() => decrease(setLightHeat, lightHeat)}
+                onClick={() => decrease(setLight, luz)}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
               >
                 -
               </button>
               <input
+                aria-label="Luz"
                 type="range"
                 min="0"
                 max="100"
-                value={lightHeat}
-                onChange={(e) => setLightHeat(parseInt(e.target.value))}
+                value={luz}
+                onChange={handleLightChange}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
               <button
-                onClick={() => increase(setLightHeat, lightHeat)}
+                onClick={() => increase(setLight, luz)}
                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
               >
                 +
@@ -134,11 +167,12 @@ const ControlTable = () => {
                 -
               </button>
               <input
+                aria-label="Ventilador 1"
                 type="range"
                 min="0"
                 max="100"
                 value={fan1}
-                onChange={(e) => setFan1(parseInt(e.target.value))}
+                onChange={handleFan1Change}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
               <button
@@ -159,11 +193,12 @@ const ControlTable = () => {
                 -
               </button>
               <input
+                aria-label="Ventilador 2"
                 type="range"
                 min="0"
                 max="100"
                 value={fan2}
-                onChange={(e) => setFan2(parseInt(e.target.value))}
+                onChange={handleFan2Change}
                 className="w-64 h-6 bg-gray-200 rounded-full"
               />
               <button
