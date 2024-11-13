@@ -4,10 +4,10 @@ import { useState } from "react";
 import { mutate } from "swr";
 
 const ControlTable = () => {
-  const [luz, setLight] = useState(50); 
+  const [luz, setLight] = useState(50);
   const [fan1, setFan1] = useState(50);
   const [fan2, setFan2] = useState(50);
-  
+
   const sendDataToAPI = async (device, value) => {
     try {
       const response = await fetch('/api/monitoreo', {
@@ -25,8 +25,8 @@ const ControlTable = () => {
       console.error('Error enviando datos a la API:', error);
     }
   };
-  
-  //Manejar cambios
+
+  // Manejar cambios
   const handleLightChange = (e) => {
     const newValue = parseInt(e.target.value);
     setLight(newValue);
@@ -54,68 +54,48 @@ const ControlTable = () => {
   };
 
   return (
-    <main className="container mx-auto mt-8">
-      {/* Contenedor principal */}
+    <main className="container mx-auto mt-8 px-4">
       {/* Barra de navegación estilizada */}
       <nav className="shadow-md rounded-lg mb-8">
-        <ul className="flex justify-around">
-          <li>
+        <ul className="flex flex-wrap justify-center md:justify-around space-y-2 md:space-y-0">
+          <li className="w-full md:w-auto">
             <a
               href="./monitoreo"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #3cb371, #2e8b57)", // Estilo de fondo para el botón
-              }}
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
               <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-green-700 opacity-25" />
               <span className="relative">MONITOREO</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
-              href="./monitoreo"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #4682b4, #1e90ff)", // Estilo de fondo
-              }}
+              href="./control"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-blue-700 opacity-25" />
               <span className="relative">CONTROL</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
-              href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #f0e68c, #ffd700)", // Estilo de fondo
-              }}
+              href="./dia_datos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-yellow-700 opacity-25" />
               <span className="relative">DATOS DEL DÍA</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
-              href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ff8c00, #ff4500)", // Estilo de fondo
-              }}
+              href="./graficos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-orange-700 opacity-25" />
               <span className="relative">GRÁFICOS</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
               href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ff6347, #b22222)", // Estilo de fondo
-              }}
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-red-700 opacity-25" />
               <span className="relative">CAM LIVE</span>
             </a>
           </li>
@@ -123,16 +103,14 @@ const ControlTable = () => {
       </nav>
 
       {/* Sección de control */}
-
       <section className="text-center mb-8">
         <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1>
 
         {/* Panel de control */}
-        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-auto max-h-96">
           <div className="flex flex-col items-center space-y-6">
-            
             {/* Control de luz/calor */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center space-x-4">
               <span className="text-lg">LUZ</span>
               <button
                 onClick={() => decrease(setLight, luz)}
@@ -158,7 +136,7 @@ const ControlTable = () => {
             </div>
 
             {/* Control del ventilador 1 */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center space-x-4">
               <span className="text-lg">VENTILADOR 1</span>
               <button
                 onClick={() => decrease(setFan1, fan1)}
@@ -184,7 +162,7 @@ const ControlTable = () => {
             </div>
 
             {/* Control del ventilador 2 */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center space-x-4">
               <span className="text-lg">VENTILADOR 2</span>
               <button
                 onClick={() => decrease(setFan2, fan2)}

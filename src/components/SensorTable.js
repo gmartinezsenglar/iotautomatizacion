@@ -16,80 +16,61 @@ const SensorTable = () => {
   if (!data) return <div>Cargando...</div>;
 
   return (
-    <main className="container mx-auto mt-8">
+    <main className="container mx-auto mt-8 px-4">
       {/* Contenedor principal */}
       {/* Barra de navegación estilizada */}
       <nav className="shadow-md rounded-lg mb-8">
-        <ul className="flex justify-around">
+        <ul className="flex flex-wrap justify-center md:justify-around space-y-2 md:space-y-0">
           {/* Lista horizontal de enlaces */}
-          <li>
+          <li className="w-full md:w-auto">
             <a
               href="./monitoreo"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #3cb371, #2e8b57)", // Estilo de fondo para el botón
-              }}
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
               <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-green-700 opacity-25" />
               <span className="relative">MONITOREO</span>
             </a>
           </li>
-          {/* Más botones de navegación con estilos similares */}
-          <li>
+          <li className="w-full md:w-auto">
             <a
               href="./control"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #4682b4, #1e90ff)", // Estilo de fondo
-              }}
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-blue-700 opacity-25" />
               <span className="relative">CONTROL</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
-              href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #f0e68c, #ffd700)", // Estilo de fondo
-              }}
+              href="./dia_datos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-yellow-700 opacity-25" />
               <span className="relative">DATOS DEL DÍA</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
-              href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ff8c00, #ff4500)", // Estilo de fondo
-              }}
+              href="./graficos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-orange-700 opacity-25" />
               <span className="relative">GRÁFICOS</span>
             </a>
           </li>
-          <li>
+          <li className="w-full md:w-auto">
             <a
               href="#"
-              className="relative inline-block px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundImage: "linear-gradient(to right, #ff6347, #b22222)", // Estilo de fondo
-              }}
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
             >
-              <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-red-700 opacity-25" />
               <span className="relative">CAM LIVE</span>
             </a>
           </li>
         </ul>
       </nav>
+
       {/* Sección de Datos Actuales */}
       <section className="text-center mb-8">
         <h1 className="text-2xl font-bold mb-4">DATOS ACTUALES</h1>
         {/* Contenedor de la tabla */}
-        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-x-auto">
           {/* Tabla de datos */}
           <table className="w-full table-auto text-left border-separate border-spacing-0">
             <thead>
@@ -100,7 +81,6 @@ const SensorTable = () => {
               </tr>
             </thead>
             <tbody>
-              {/* Filas de la tabla con datos de monitoreo */}
               <tr className="odd:bg-cyan-50 even:bg-white hover:bg-cyan-100 transition duration-200">
                 <td className="px-4 py-3 border-b border-gray-300 text-cyan-600">
                   TEMPERATURA
@@ -143,9 +123,10 @@ const SensorTable = () => {
               </tr>
             </tbody>
           </table>
-          <hr className="my-4 border-t border-cyan-300" /> {/* Línea horizontal entre parámetros */}
+          <hr className="my-4 border-t border-cyan-300" />
         </div>
       </section>
+
       {/* Botón de actualizar datos */}
       <div className="text-center mt-8">
         <button

@@ -71,3 +71,8 @@ export const changePremium = async () => {
   await session.save();
   revalidatePath("/profile");
 };
+
+export const getUsers = async () => {
+  const [rows] = await connection.execute('SELECT Usuario, name, rol FROM usuarios');
+  return rows; // Devuelve los usuarios sin la contraseña por seguridad
+};
