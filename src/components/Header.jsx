@@ -35,15 +35,15 @@ const Navbar = () => {
             </div>
 
             <div className='hidden lg:flex space-x-4 items-center'>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              <Link href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Inicio
-              </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              </Link>
+              <Link href='/informacion' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Sobre nosotros
-              </a>
-              <a href='/' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
+              </Link>
+              <Link href='/contactanos' className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                 Contáctanos
-              </a>
+              </Link>
               <Link href="/admin" className='text-white hover:bg-white hover:text-black rounded-lg p-2'>
                   Panel de Admin
               </Link>

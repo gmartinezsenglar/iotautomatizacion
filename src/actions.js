@@ -47,7 +47,8 @@ export const login = async (prevState, formData) => {
   }
 
 
-  session.username = user.Usuario;
+  session.useremail = user.Usuario;
+  session.name = user.name;
   session.rol = user.rol;
   session.isPro =   isPro; 
   session.isLoggedIn = true;

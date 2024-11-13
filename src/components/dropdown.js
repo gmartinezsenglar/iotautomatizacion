@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { getSession } from "@/actions";
 import LogoutForm from "./logoutForm";
+import Link from "next/link";
 
 const DropDownProfile = () => {
     const [session, setSession] = useState(null);
@@ -18,7 +19,7 @@ const DropDownProfile = () => {
 
     return (
         <ul className="flex flex-col gap-2 p-4">
-            <li className="text-black hover:bg-gray-100 p-2 rounded-md cursor-pointer">Profile</li>
+            <Link href="/profile" className="text-black hover:bg-gray-100 p-2 rounded-md cursor-pointer">Profile</Link>
             <li className="text-black hover:bg-gray-100 p-2 rounded-md cursor-pointer">Settings</li>
             <li className="text-black hover:bg-gray-100 p-2 rounded-md cursor-pointer">
                 <LogoutForm />
