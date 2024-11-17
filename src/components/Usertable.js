@@ -15,7 +15,7 @@ const columns = [
 // Renderizar cada fila de la lista de usuarios
 const renderRow = (user, openEditModal) => (
   <tr
-    key={user.id}
+    key={user.Usuario}
     className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-gray-100"
   >
     <td className="p-4">

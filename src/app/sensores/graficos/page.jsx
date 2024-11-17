@@ -14,93 +14,47 @@ const sensorLabels = {
   luminosidad: "Luminosidad (lux)",
 };
 
-const sensorData = {
-  temperatura: {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-    datasets: [
-      {
-        label: "Temperatura (°C)",
-        data: [22, 23, 25, 20, 19, 18, 21, 23, 24, 26, 27, 25],
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  eco2: {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-    datasets: [
-      {
-        label: "CO2 (ppm)",
-        data: [400, 420, 450, 500, 470, 480, 460, 430, 410, 420, 430, 440],
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  humedad: {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-    datasets: [
-      {
-        label: "Humedad (%)",
-        data: [65, 70, 75, 80, 85, 90, 95, 90, 85, 80, 75, 70],
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  tierra: {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-    datasets: [
-      {
-        label: "Humedad del Suelo (%)",
-        data: [40, 42, 45, 47, 49, 50, 52, 54, 55, 56, 57, 58],
-        borderColor: "rgba(153, 102, 255, 1)",
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  luminosidad: {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-    datasets: [
-      {
-        label: "Luminosidad (lux)",
-        data: [100, 120, 150, 200, 250, 220, 180, 160, 140, 130, 110, 100],
-        borderColor: "rgba(255, 206, 86, 1)",
-        backgroundColor: "rgba(255, 206, 86, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-};
-
 const GraficosPage = () => {
   const [selectedSensor, setSelectedSensor] = useState("temperatura");
   const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para la fecha seleccionada
   const [datosSimulados, setDatosSimulados] = useState([]);
-  const [estadisticas, setEstadisticas] = useState({}); 
+  const [estadisticas, setEstadisticas] = useState({});
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
     const fetchData = async () => {
-      const datos = await obtenerDatosSimulados();
+      const year = selectedDate.getFullYear();
+      const month = selectedDate.getMonth();
+      const datos = await obtenerDatosSimulados(selectedSensor, year, month);
       setDatosSimulados(datos);
+
+      const labels = datos.map(d => d.fecha); // Días del mes
+      const data = datos.map(d => d.valor);  // Valores diarios
+
+      setChartData({
+        labels,
+        datasets: [
+          {
+            label: `${selectedSensor} por Día`,
+            data,
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            tension: 0.4,
+            fill: true,
+          },
+        ],
+      });
+
+      const stats = calcular_estadisticas(datos);
+      setEstadisticas(stats); // Calcular estadísticas de los datos del gráfico
     };
     fetchData();
-  }, []);
+  }, [selectedDate, selectedSensor]);
 
   useEffect(() => {
-    const filteredData = datosSimulados.filter(dato => dato.tipo === selectedSensor);
-    const stats = calcular_estadisticas(filteredData);
-    setEstadisticas(stats[selectedSensor] || {}); 
-  }, [datosSimulados, selectedSensor]); 
+    const stats = calcular_estadisticas(datosSimulados);
+    setEstadisticas(stats);
+  }, [datosSimulados]);
 
   const sensorLabel = sensorLabels[selectedSensor];
 
@@ -144,50 +98,50 @@ const GraficosPage = () => {
     <main className="container mx-auto mt-8 px-4">
       {/* Barra de navegación estilizada */}
       <nav className="shadow-md rounded-lg mb-8">
-      <ul className="flex flex-wrap justify-center md:justify-around space-y-2 md:space-y-0">
-        {/* Lista horizontal de enlaces */}
-        <li className="w-full md:w-auto">
-          <a
-            href="./monitoreo"
-            className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
-          >
-            <span className="relative">MONITOREO</span>
-          </a>
-        </li>
-        <li className="w-full md:w-auto">
-          <a
-            href="./control"
-            className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
-          >
-            <span className="relative">CONTROL</span>
-          </a>
-        </li>
-        <li className="w-full md:w-auto">
-          <a
-            href="./dia_datos"
-            className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
-          >
-            <span className="relative">DATOS DEL DÍA</span>
-          </a>
-        </li>
-        <li className="w-full md:w-auto">
-          <a
-            href="./graficos"
-            className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
-          >
-            <span className="relative">GRÁFICOS</span>
-          </a>
-        </li>
-        <li className="w-full md:w-auto">
-          <a
-            href="#"
-            className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
-          >
-            <span className="relative">CAM LIVE</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+        <ul className="flex flex-wrap justify-center md:justify-around space-y-2 md:space-y-0">
+          {/* Lista horizontal de enlaces */}
+          <li className="w-full md:w-auto">
+            <a
+              href="./monitoreo"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
+            >
+              <span className="relative">MONITOREO</span>
+            </a>
+          </li>
+          <li className="w-full md:w-auto">
+            <a
+              href="./control"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
+            >
+              <span className="relative">CONTROL</span>
+            </a>
+          </li>
+          <li className="w-full md:w-auto">
+            <a
+              href="./dia_datos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
+            >
+              <span className="relative">DATOS DEL DÍA</span>
+            </a>
+          </li>
+          <li className="w-full md:w-auto">
+            <a
+              href="./graficos"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
+            >
+              <span className="relative">GRÁFICOS</span>
+            </a>
+          </li>
+          <li className="w-full md:w-auto">
+            <a
+              href="#"
+              className="relative inline-block w-full md:w-auto px-6 py-3 text-white bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 text-center"
+            >
+              <span className="relative">CAM LIVE</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
 
       <h1 className="text-2xl font-bold mb-4 text-center">GRÁFICOS</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -213,25 +167,25 @@ const GraficosPage = () => {
               </select>
             </div>
 
-           {/* Selector de fecha */}
-           <div className="flex flex-col w-1/2 ml-4">
+            {/* Selector de fecha */}
+            <div className="flex flex-col w-1/2 ml-4">
               <label className="block text-lg font-bold mb-2" htmlFor="fecha">
                 Selecciona la Fecha:
               </label>
               <DatePicker
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
-                dateFormat="yyyy/MM/dd"
-                maxDate={new Date()}
+                dateFormat="MMMM yyyy"
+                showMonthYearPicker
+                minDate={new Date(2024, 7)} // Agosto 2024
+                maxDate={new Date(2024, 10)} // Noviembre 2024
                 className="border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
-          <h2 className="text-xl font-bold mb-4">
-            Gráfico - {sensorLabel}
-          </h2>
-          <LineChart data={sensorData[selectedSensor]} options={chartOptions} />
+          <h2 className="text-xl font-bold mb-4">Gráfico - {sensorLabel}</h2>
+          <LineChart data={chartData} options={{ responsive: true }} />
         </div>
 
         {/* Panel de estadísticas */}
