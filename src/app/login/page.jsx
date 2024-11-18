@@ -1,18 +1,17 @@
-import {redirect} from 'next/navigation'
-import { getSession } from "@/actions"
+import { redirect } from 'next/navigation';
+import { getSession } from "@/actions";
 import Image from 'next/image';
-import LoginForm from '@/components/loginForm'
+import LoginForm from '@/components/loginForm';
 
 export default async function Login() {
     const session = await getSession();
     
     if (session.isLoggedIn) {
       redirect("/");
-
-      
     }
+
     return (
-      <div className="min-h-screen grid grid-cols-2">
+      <div className="h-screen grid grid-cols-2">
         <div className="flex items-center justify-center bg-slate-700">
           <Image
             src='/images/tuerca.png'
@@ -23,10 +22,10 @@ export default async function Login() {
           />
         </div>
         <div className="flex items-center justify-center bg-white p-8">
-          <div className="w-full max-w-sm">
-          <LoginForm></LoginForm>
+          <div className="min-h-screen w-full max-w-sm">
+            <LoginForm />
           </div>
         </div>
       </div>
     );
-} 
+}
