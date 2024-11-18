@@ -223,7 +223,7 @@ const GraficosPage = () => {
                 onChange={(date) => setSelectedDate(date)}
                 dateFormat="yyyy/MM/dd"
                 maxDate={new Date()}
-                className="border border-gray-300 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-5000"
               />
             </div>
           </div>
