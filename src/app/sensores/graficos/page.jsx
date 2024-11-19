@@ -14,6 +14,29 @@ const sensorLabels = {
   luminosidad: "Luminosidad (lux)",
 };
 
+const sensorColors = {
+  temperatura: {
+    borderColor: "rgba(255, 99, 132, 1)", // Rojo
+    backgroundColor: "rgba(255, 99, 132, 0.2)",
+  },
+  eco2: {
+    borderColor: "rgba(54, 162, 235, 1)", // Azul
+    backgroundColor: "rgba(54, 162, 235, 0.2)",
+  },
+  humedad: {
+    borderColor: "rgba(75, 192, 192, 1)", // Verde
+    backgroundColor: "rgba(75, 192, 192, 0.2)",
+  },
+  tierra: {
+    borderColor: "rgba(255, 206, 86, 1)", // Amarillo
+    backgroundColor: "rgba(255, 206, 86, 0.2)",
+  },
+  luminosidad: {
+    borderColor: "rgba(153, 102, 255, 1)", // Púrpura
+    backgroundColor: "rgba(153, 102, 255, 0.2)",
+  },
+};
+
 const GraficosPage = () => {
   const [selectedSensor, setSelectedSensor] = useState("temperatura");
   const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para la fecha seleccionada
@@ -31,14 +54,16 @@ const GraficosPage = () => {
       const labels = datos.map(d => d.fecha); // Días del mes
       const data = datos.map(d => d.valor);  // Valores diarios
 
+      const colors = sensorColors[selectedSensor]; // Obtener colores del sensor actual
+
       setChartData({
         labels,
         datasets: [
           {
             label: `${selectedSensor} por Día`,
             data,
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderColor: colors.borderColor,
+            backgroundColor: colors.backgroundColor,
             tension: 0.4,
             fill: true,
           },
