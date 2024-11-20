@@ -20,27 +20,6 @@ main {
   padding-bottom: 1%;
 }
 
-#section_footer {
-  width: 100%;
-  background: #3b82f6;
-
-  a,
-  span {
-    color: #fff;
-    font-size: 1rem;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  p {
-    color: #fff;
-    font-size: 0.6em;
-  }
-}
-
 .dropDownProfile {
   position: absolute;
   top: 4.5rem;
