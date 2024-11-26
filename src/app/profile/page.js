@@ -1,7 +1,6 @@
 import { getSession } from "@/actions";
 import AdminSection from "@/components/AdminSection";
 import Sidebar from "@/components/Sidebar";
-import UserSection from "@/components/UserSection";
 import { redirect } from "next/navigation";
 
 export default async function Profile() {
@@ -16,12 +15,17 @@ export default async function Profile() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row justify-center items-start lg:space-x-6 p-6">
-      <div className="lg:w-64 w-full max-w-xs mb-6 lg:mb-0">
+    <div className="flex flex-col lg:flex-row min-h-screen p-4">
+      {/* Sidebar */}
+      <div className="lg:w-64 lg:mr-4 mb-4 lg:mb-0">
         <Sidebar />
       </div>
-      <div className="flex-1 bg-gray-50 rounded-lg shadow-md p-6">
-        {session.rol === "admin" ? <AdminSection /> : <UserSection />}
+
+      {/* User Info Box */}
+      <div className="flex flex-col flex-grow justify-center items-center">
+        <div className="w-full max-w-lg">
+          {session.rol === "admin" ? <AdminSection /> : <UserSection />}
+        </div>
       </div>
     </div>
   );
