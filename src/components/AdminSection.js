@@ -34,7 +34,7 @@ const AdminSection = async () => {
           <div className="py-4 grid grid-cols-3 gap-4">
             <dt className="text-sm font-medium text-gray-500">Dirección</dt>
             <dd className="col-span-2 text-sm text-gray-900">
-              Calle Falsa 4565<br />Labranza, CHILE
+              Fake Street 4565<br />Labranza, CHILE
             </dd>
           </div>
         </dl>

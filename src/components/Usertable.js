@@ -59,7 +59,42 @@ const renderRow = (user, openEditModal) => (
 );
 
 // El componente del Modal para "Editar Usuario"
-const EditUserModal = ({ isOpen, onClose, user }) => {
+const EditUserModal = ({ isOpen, onClose, user, fetchUsers }) => {
+  const [name, setName] = useState(user?.name || "");
+  const [usuario, setUsuario] = useState(user?.Usuario || "");
+  const [rol, setRol] = useState(user?.rol || "usuario");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/api/users/${user.Usuario}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(), // Prevenir campos vacíos o undefined
+          usuario: usuario.trim(),
+          rol,
+          ...(newPassword ? { newPassword } : {}), // Solo enviar si no es vacío
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar el usuario");
+      }
+
+      alert("Usuario actualizado correctamente");
+      fetchUsers();
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("No se pudo actualizar el usuario.");
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -74,14 +109,15 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg relative">
           <h2 className="text-2xl font-semibold mb-4">Editar Usuario</h2>
-          <form>
+          <form onSubmit={handleUpdateUser}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
                 Nombre
               </label>
               <input
                 type="text"
-                defaultValue={user.name} // Mostramos el nombre actual
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa nuevo nombre de usuario"
               />
@@ -92,7 +128,8 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
               </label>
               <input
                 type="text"
-                defaultValue={user.Usuario} // Mostramos el ID actual
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa nuevo usuario."
               />
@@ -102,11 +139,12 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                 Rol
               </label>
               <select
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
-                defaultValue={user.role}
               >
-                <option value="Administrador">Administrador</option>
-                <option value="Usuario">Usuario</option>
+                <option value="admin">Administrador</option>
+                <option value="usuario">Usuario</option>
               </select>
             </div>
             <div className="mb-4">
@@ -115,15 +153,16 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
               </label>
               <input
                 type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa la nueva contraseña"
               />
             </div>
             <div className="flex justify-end">
               <button
-                type="button"
+                type="submit"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
-                onClick={onClose}
               >
                 Actualizar datos
               </button>
@@ -337,6 +376,19 @@ const UserListPage = () => {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         user={selectedUser}
+        fetchUsers={() => {
+          // Refrescar la lista después de la edición
+          const fetchUsers = async () => {
+            try {
+              const response = await fetch("/api/users");
+              const data = await response.json();
+              setUsersData(data);
+            } catch (error) {
+              console.error("Error al obtener los usuarios:", error);
+            }
+          };
+          fetchUsers();
+        }}
       />
     </div>
   );
