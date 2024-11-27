@@ -30,7 +30,7 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/sensores/:path*', '/monitoreo/:path*','/dia_datos/:path*'],
+  matcher: ['/admin/:path*', '/sensores/:path*', '/monitoreo/:path*', '/dia_datos/:path*', '/invernaderos/:path*'],
 };
 
 
