@@ -1,6 +1,7 @@
 import { getSession } from "@/actions";
 import AdminSection from "@/components/AdminSection";
 import Sidebar from "@/components/Sidebar";
+import UserSection from "@/components/UserSection";
 import { redirect } from "next/navigation";
 
 export default async function Profile() {

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const Sidebar = () => {
@@ -34,6 +35,14 @@ const Sidebar = () => {
               <a href="#" className="hover:bg-gray-700 p-2 rounded-md block">
                 Actualizar Datos
               </a>
+            </li>
+            <li className="mb-3">
+              <Link
+                href="/admin"
+                className="hover:bg-gray-700 p-2 rounded-md block"
+              >
+                Panel de admin
+              </Link>
             </li>
           </ul>
         </div>

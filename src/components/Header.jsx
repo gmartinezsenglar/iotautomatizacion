@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import DropDownProfile from "../components/dropdown";
 
 const Navbar = () => {
   const [isClick, setIsClick] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const pathname = usePathname();
 
   const toggleNavbar = () => {
     setIsClick(!isClick);
@@ -15,6 +17,10 @@ const Navbar = () => {
   const toggleProfileDropdown = () => {
     setOpenProfile(!openProfile);
   };
+
+  useEffect(() => {
+    setOpenProfile(false);
+  }, [pathname]);
 
   return (
     <>
@@ -53,12 +59,7 @@ const Navbar = () => {
               >
                 Contáctanos
               </Link>
-              <Link
-                href="/admin"
-                className="text-white hover:bg-white hover:text-black rounded-lg p-2"
-              >
-                Panel de Admin
-              </Link>
+
               <div className="relative">
                 <button
                   onClick={toggleProfileDropdown}
@@ -142,12 +143,7 @@ const Navbar = () => {
               >
                 Contáctanos
               </Link>
-              <Link
-                href="/admin"
-                className="text-white hover:bg-white hover:text-black rounded-lg p-2"
-              >
-                Panel de Admin
-              </Link>
+
               <div className="relative">
                 <button
                   onClick={toggleProfileDropdown}
