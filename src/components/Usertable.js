@@ -13,7 +13,7 @@ const columns = [
 ];
 
 // Renderizar cada fila de la lista de usuarios
-const renderRow = (user, openEditModal) => (
+const renderRow = (user, openEditModal, openDeleteModal) => (
   <tr
     key={user.Usuario}
     className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-gray-100"
@@ -50,7 +50,10 @@ const renderRow = (user, openEditModal) => (
         >
           <Image src="/images/editar.png" alt="Edit" width={16} height={16} />
         </button>
-        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-red-200">
+        <button
+          className="w-7 h-7 flex items-center justify-center rounded-full bg-red-200"
+          onClick={() => openDeleteModal(user)}
+        >
           <Image src="/images/basura.png" alt="Delete" width={16} height={16} />
         </button>
       </div>
@@ -289,9 +292,53 @@ const AddUserModal = ({ isOpen, onClose, fetchUsers }) => {
   );
 };
 
+const DeleteConfirmationModal = ({ isOpen, onClose, onDelete }) => {
+  if (!isOpen) return null;
+
+  const handleDelete = async () => {
+    await onDelete(); // Invoca la función proporcionada
+    onClose(); // Cierra el modal tras la eliminación
+  };
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        onClick={onClose}
+      ></div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm relative">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">
+            ¿Eliminar usuario?
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Esta acción no se puede deshacer. ¿Estás seguro de que deseas
+            eliminar este usuario?
+          </p>
+          <div className="flex justify-end">
+            <button
+              className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md mr-2"
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+              onClick={handleDelete}
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const UserListPage = () => {
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [usersData, setUsersData] = useState([]); // Estado para los datos de usuarios
 
@@ -310,6 +357,16 @@ const UserListPage = () => {
     fetchUsers(); // Llamar a la función para cargar los usuarios cuando el componente se monte
   }, []);
 
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/users");
+      const data = await response.json();
+      setUsersData(data);
+    } catch (error) {
+      console.error("Error al obtener los usuarios:", error);
+    }
+  };
+
   const handleUserAdded = () => {
     fetchUsers(); // Actualiza la lista de usuarios
   };
@@ -317,6 +374,33 @@ const UserListPage = () => {
   const openEditModal = (user) => {
     setSelectedUser(user);
     setIsEditModalOpen(true);
+  };
+
+  const openDeleteModal = (user) => {
+    setSelectedUser(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${selectedUser.Usuario}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        // Este mensaje puede ser específico según el código de estado
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al eliminar el usuario");
+      }
+
+      alert("Usuario eliminado correctamente");
+      setIsDeleteModalOpen(false); // Asegúrate de cerrar el modal correctamente
+      setSelectedUser(null); // Limpia el usuario seleccionado
+      fetchUsers(); // Actualiza la lista
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message || "No se pudo eliminar el usuario.");
+    }
   };
 
   return (
@@ -349,7 +433,9 @@ const UserListPage = () => {
             </tr>
           </thead>
           <tbody>
-            {usersData.map((user) => renderRow(user, openEditModal))}
+            {usersData.map((user) =>
+              renderRow(user, openEditModal, openDeleteModal)
+            )}
           </tbody>
         </table>
       </div>
@@ -389,6 +475,11 @@ const UserListPage = () => {
           };
           fetchUsers();
         }}
+      />
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDeleteUser}
       />
     </div>
   );

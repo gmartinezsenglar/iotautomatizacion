@@ -80,3 +80,24 @@ export async function PUT(req, { params }) {
     );
   }
 }
+
+export async function DELETE(req, { params }) {
+  const { usuario } = params;
+
+  try {
+    await connection.execute("DELETE FROM usuarios WHERE Usuario = ?", [
+      usuario,
+    ]);
+
+    return NextResponse.json(
+      { message: "Usuario eliminado correctamente." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error);
+    return NextResponse.json(
+      { error: "Error interno del servidor." },
+      { status: 500 }
+    );
+  }
+}
