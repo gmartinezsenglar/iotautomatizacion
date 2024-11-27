@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { mutate } from "swr";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLightbulb, faFan } from "@fortawesome/free-solid-svg-icons"; 
 
 const ControlTable = () => {
   const [luz, setLight] = useState(50);
@@ -104,13 +106,14 @@ const ControlTable = () => {
 
       {/* Sección de control */}
       <section className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-4">CONTROL DE DISPOSITIVOS</h1>
+        <h1 className="text-3xl font-bold text-gray-800 border-b border-gray-300 pb-2 mb-6">CONTROL DE DISPOSITIVOS</h1>
 
         {/* Panel de control */}
         <div className="mx-auto p-6 bg-white shadow-lg rounded-lg overflow-auto max-h-96">
           <div className="flex flex-col items-center space-y-6">
             {/* Control de luz/calor */}
             <div className="flex items-center justify-center space-x-4">
+              <FontAwesomeIcon icon={faLightbulb} className="text-yellow-500 text-2xl" />
               <span className="text-lg">LUZ</span>
               <button
                 onClick={() => decrease(setLight, luz)}
@@ -133,10 +136,13 @@ const ControlTable = () => {
               >
                 +
               </button>
+              <span className="text-lg font-bold text-gray-700"> {luz} Lux</span>
+              
             </div>
 
             {/* Control del ventilador 1 */}
             <div className="flex items-center justify-center space-x-4">
+              <FontAwesomeIcon icon={faFan} className="text-blue-500 text-2xl" />
               <span className="text-lg">VENTILADOR 1</span>
               <button
                 onClick={() => decrease(setFan1, fan1)}
@@ -158,11 +164,12 @@ const ControlTable = () => {
                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full"
               >
                 +
-              </button>
+              </button> <span className="text-lg font-bold text-gray-700"> {fan1 * 10} RPM</span>
             </div>
 
             {/* Control del ventilador 2 */}
             <div className="flex items-center justify-center space-x-4">
+              <FontAwesomeIcon icon={faFan} className="text-blue-500 text-2xl" />
               <span className="text-lg">VENTILADOR 2</span>
               <button
                 onClick={() => decrease(setFan2, fan2)}
@@ -185,6 +192,7 @@ const ControlTable = () => {
               >
                 +
               </button>
+              <span className="text-lg font-bold text-gray-700"> {fan2 * 10} RPM</span>
             </div>
           </div>
         </div>
