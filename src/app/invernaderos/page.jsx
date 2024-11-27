@@ -59,12 +59,12 @@ const Invernaderos = () => {
           invernaderos.map((invernadero) => (
             <div
               key={invernadero.id_invernadero}
-              onClick={() => (window.location.href = "/sensores/monitoreo")}
               className="bg-white shadow-md rounded-lg flex flex-col items-center justify-center p-4"
             >
               <img
                 src="/images/greenhouse.png"
                 alt={`Invernadero ${invernadero.nombre}`}
+                onClick={() => (window.location.href = "/sensores/monitoreo")}
                 className="w-24 h-24 rounded-full mb-4"
               />
               <h3 className="text-lg font-semibold">
