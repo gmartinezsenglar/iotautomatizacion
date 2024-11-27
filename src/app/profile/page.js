@@ -19,7 +19,7 @@ export default async function Profile() {
     <div className="flex flex-col lg:flex-row min-h-screen p-4">
       {/* Sidebar */}
       <div className="lg:w-64 lg:mr-4 mb-4 lg:mb-0">
-        <Sidebar />
+        <Sidebar session={session} />
       </div>
 
       {/* User Info Box */}

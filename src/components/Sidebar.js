@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ session }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -36,14 +36,17 @@ const Sidebar = () => {
                 Actualizar Datos
               </a>
             </li>
-            <li className="mb-3">
-              <Link
-                href="/admin"
-                className="hover:bg-gray-700 p-2 rounded-md block"
-              >
-                Panel de admin
-              </Link>
-            </li>
+
+            {session?.rol === "admin" && (
+              <li className="mb-3">
+                <Link
+                  href="/admin"
+                  className="hover:bg-gray-700 p-2 rounded-md block"
+                >
+                  Panel de Admin
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -88,6 +91,17 @@ const Sidebar = () => {
                     Actualizar Datos
                   </a>
                 </li>
+
+                {session?.rol === "admin" && (
+                  <li className="mb-3">
+                    <Link
+                      href="/admin"
+                      className="hover:bg-gray-700 p-2 rounded-md block"
+                    >
+                      Panel de Admin
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
