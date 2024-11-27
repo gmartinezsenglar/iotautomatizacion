@@ -4,9 +4,10 @@
 
 html,
 body {
+  background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
   height: 100%;
   margin: 0;
-  background: #f1f3f9;
+  font-family: 'Inter', sans-serif;
 }
 
 .layout-container {

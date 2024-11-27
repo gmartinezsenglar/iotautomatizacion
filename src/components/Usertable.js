@@ -15,7 +15,7 @@ const columns = [
 // Renderizar cada fila de la lista de usuarios
 const renderRow = (user, openEditModal) => (
   <tr
-    key={user.id}
+    key={user.Usuario}
     className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-gray-100"
   >
     <td className="p-4">
@@ -143,7 +143,36 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
 };
 
 // El componente del Modal para "Agregar Usuario"
-const AddUserModal = ({ isOpen, onClose }) => {
+const AddUserModal = ({ isOpen, onClose, fetchUsers }) => {
+  const [name, setName] = useState("");
+  const [usuario, setUsuario] = useState("");
+  const [rol, setRol] = useState("usuario");
+
+  // Función para manejar la creación del usuario
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, usuario, rol }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al agregar el usuario");
+      }
+
+      alert("Usuario agregado correctamente");
+      fetchUsers(); // Actualizar la lista de usuarios
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("No se pudo agregar el usuario.");
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -158,15 +187,18 @@ const AddUserModal = ({ isOpen, onClose }) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg relative">
           <h2 className="text-2xl font-semibold mb-4">Agregar Usuario</h2>
-          <form>
+          <form onSubmit={handleAddUser}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
                 Nombre
               </label>
               <input
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa el nombre del usuario"
+                required
               />
             </div>
             <div className="mb-4">
@@ -175,24 +207,31 @@ const AddUserModal = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="text"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
                 className="mt-1 p-2 border rounded-md w-full"
                 placeholder="Ingresa el usuario"
+                required
               />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
                 Rol
               </label>
-              <select className="mt-1 p-2 border rounded-md w-full">
+              <select
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
+                className="mt-1 p-2 border rounded-md w-full"
+                required
+              >
                 <option value="Admin">Admin</option>
                 <option value="User">Usuario</option>
               </select>
             </div>
             <div className="flex justify-end">
               <button
-                type="button"
+                type="submit"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
-                onClick={onClose}
               >
                 Agregar
               </button>
@@ -231,6 +270,10 @@ const UserListPage = () => {
 
     fetchUsers(); // Llamar a la función para cargar los usuarios cuando el componente se monte
   }, []);
+
+  const handleUserAdded = () => {
+    fetchUsers(); // Actualiza la lista de usuarios
+  };
 
   const openEditModal = (user) => {
     setSelectedUser(user);
@@ -275,6 +318,19 @@ const UserListPage = () => {
       <AddUserModal
         isOpen={isAddUserModalOpen}
         onClose={() => setIsAddUserModalOpen(false)}
+        fetchUsers={() => {
+          // Función para actualizar la lista de usuarios
+          const fetchUsers = async () => {
+            try {
+              const response = await fetch("/api/users");
+              const data = await response.json();
+              setUsersData(data);
+            } catch (error) {
+              console.error("Error al obtener los usuarios:", error);
+            }
+          };
+          fetchUsers();
+        }}
       />
       {/* Modal para editar usuario */}
       <EditUserModal

@@ -1,4 +1,3 @@
-// src/app/page.js
 import UserTable from "@/components/Usertable";
 import "@/app/styles/globals.css";
 
